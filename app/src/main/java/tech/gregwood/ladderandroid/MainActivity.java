@@ -7,11 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import tech.gregwood.ladderandroid.data.Posting;
 import tech.gregwood.ladderandroid.utility.GetAllPostingsTask;
+import tech.gregwood.ladderandroid.utility.GetPostingTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +29,13 @@ public class MainActivity extends AppCompatActivity {
         try {
 
             ArrayList<Posting> postings = new GetAllPostingsTask().execute().get();
+
+//            Posting posting = new GetPostingTask().execute(1).get();
+//            ArrayList<Posting> postings = new ArrayList<>();
+//            postings.add(posting);
+
             ListView postingsList = (ListView) findViewById(R.id.postings_list);
+
             postingsList.setAdapter(new ArrayAdapter<Posting>(this, android.R.layout.simple_list_item_1, postings));
 
         } catch (InterruptedException e) {
