@@ -6,12 +6,14 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import tech.gregwood.ladderandroid.data.Posting;
+import tech.gregwood.ladderandroid.utility.AddPostingTask;
 import tech.gregwood.ladderandroid.utility.GetAllPostingsTask;
 import tech.gregwood.ladderandroid.utility.GetPostingTask;
 
@@ -37,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
             ListView postingsList = (ListView) findViewById(R.id.postings_list);
 
             postingsList.setAdapter(new ArrayAdapter<Posting>(this, android.R.layout.simple_list_item_1, postings));
+
+
+            Posting posting = new Posting(-1, "A new job", "City of Mississauga", "Mississauga", "Help out the community");
+            posting.setOrganizerID(1);
+
+//            boolean bool = new AddPostingTask().execute(posting).get();
+//            Toast.makeText(this, Boolean.toString(bool), Toast.LENGTH_SHORT).show();
 
         } catch (InterruptedException e) {
             e.printStackTrace();

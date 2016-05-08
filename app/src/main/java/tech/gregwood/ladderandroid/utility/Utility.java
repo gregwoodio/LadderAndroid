@@ -1,5 +1,7 @@
 package tech.gregwood.ladderandroid.utility;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,11 +21,20 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import tech.gregwood.ladderandroid.data.Posting;
+
 /**
  * Created by greg on 5/3/2016.
  */
 public class Utility {
 
+    /**
+     * A GET request to the specified URL.
+     * @param url
+     * @return A JSON array read from the URL.
+     * @throws IOException
+     * @throws JSONException
+     */
     public static JSONArray readFromUrl(String url) throws IOException, JSONException {
         InputStream is = new URL(url).openStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -43,7 +54,7 @@ public class Utility {
      * A POST request to the specified URL.
      * @param urlString The requested URL
      * @param params SimpleEntries as Key Value pairs, to be used as POST parameters and values.
-     * @return
+     * @return A JSON array read from the URL.
      */
     public static JSONArray readFromUrl(String urlString, AbstractMap.SimpleEntry<String, String>... params)
         throws IOException, JSONException{
@@ -93,15 +104,56 @@ public class Utility {
         return json;
     }
 
+    /**
+     * Gets all the active Postings from the database.
+     * @return A JSON array of all active postings
+     * @throws IOException
+     * @throws JSONException
+     */
     public static JSONArray getAllPostings() throws IOException, JSONException {
         JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/GetAllPostings.php");
 
         return json;
     }
 
+    /**
+     * Gets a specified posting
+     * @param id ID of the specified posting.
+     * @return A JSON array containing the specified posting.
+     * @throws IOException
+     * @throws JSONException
+     */
     public static JSONArray getPosting(int id) throws IOException, JSONException {
         AbstractMap.SimpleEntry<String, String> requestedID = new AbstractMap.SimpleEntry<String, String>("PostingID", Integer.toString(id));
         JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/GetPosting.php", requestedID);
         return json;
+    }
+
+    /**
+     * Adds a Posting object to the database.
+     * @param posting The posting to add to the database.
+     * @return Success or failure of database operation.
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static boolean addPosting(Posting posting) throws IOException, JSONException {
+
+        //TODO: Add validation
+
+        AbstractMap.SimpleEntry<String, String> postingID = new AbstractMap.SimpleEntry<String, String>("OrganizationID", Integer.toString(posting.getOrganizerID()));
+        AbstractMap.SimpleEntry<String, String> jobTitle = new AbstractMap.SimpleEntry<String, String>("JobTitle", posting.getJobTitle());
+        AbstractMap.SimpleEntry<String, String> location = new AbstractMap.SimpleEntry<String, String>("Location", posting.getLocation());
+        AbstractMap.SimpleEntry<String, String> description = new AbstractMap.SimpleEntry<String, String>("Description", posting.getJobDescription());
+
+        JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/AddPosting.php", postingID, jobTitle, location, description);
+
+        Log.d("LADDER_DEBUG", json.toString());
+
+        String result = json.getString(0);
+        if (result.equals("true")) {
+            return true;
+        }
+
+        return false;
     }
 }

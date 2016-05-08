@@ -6,6 +6,7 @@ package tech.gregwood.ladderandroid.data;
 public class Posting {
     private int postingID;
     private String jobTitle;
+    private int organizerID;
     private String organizerName;
     private String location;
     private String jobDescription;
@@ -36,6 +37,14 @@ public class Posting {
 
     public void setJobTitle(String jobTitle) {
         this.jobTitle = jobTitle;
+    }
+
+    public int getOrganizerID() {
+        return organizerID;
+    }
+
+    public void setOrganizerID(int organizerID) {
+        this.organizerID = organizerID;
     }
 
     public String getOrganizerName() {

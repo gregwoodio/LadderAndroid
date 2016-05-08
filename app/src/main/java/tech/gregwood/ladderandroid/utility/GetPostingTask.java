@@ -27,8 +27,8 @@ public class GetPostingTask extends AsyncTask <Integer, Void, Posting> {
     protected Posting doInBackground(Integer... requestedID) {
 
         Posting posting = null;
-        for (int i : requestedID) {
-            Log.d(DEBUG_TAG, "Requested IDs: " + i);
+        if (requestedID.length == 0) {
+            return posting;
         }
         int id = requestedID[0];
 
