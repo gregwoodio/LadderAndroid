@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 
 import tech.gregwood.ladderandroid.data.Posting;
+import tech.gregwood.ladderandroid.data.Profile;
 
 /**
  * Created by greg on 5/3/2016.
@@ -155,5 +156,15 @@ public class Utility {
         }
 
         return false;
+    }
+
+    public static JSONArray loginProfile(String u, String p) throws IOException, JSONException {
+
+        AbstractMap.SimpleEntry<String, String> username = new AbstractMap.SimpleEntry<String, String>("Username", u);
+        AbstractMap.SimpleEntry<String, String> password = new AbstractMap.SimpleEntry<String, String>("Password", p);
+
+        JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/Login.php", username, password);
+
+        return json;
     }
 }

@@ -12,6 +12,7 @@ public abstract class Profile {
     protected String email;
     protected URL pictureURL;
     protected Date timestamp;
+    protected int accountType;
 
     public int getProfileID() {
         return profileID;
@@ -51,5 +52,13 @@ public abstract class Profile {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 }

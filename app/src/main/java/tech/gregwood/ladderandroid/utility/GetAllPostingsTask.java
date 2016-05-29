@@ -1,6 +1,7 @@
 package tech.gregwood.ladderandroid.utility;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,16 +35,18 @@ public class GetAllPostingsTask extends AsyncTask<Void, Void, ArrayList<Posting>
 
             json = json.getJSONArray(0); //the JSONArray comes in a length 1 array, so get the array at index 0.
 
+            Log.d("LADDER_DEBUG", json.toString());
+
             //iterate through the array and create a Posting object for each
             for (int i = 0; i < json.length(); i++) {
                 JSONObject obj = json.getJSONObject(i);
 
                 Posting posting = new Posting();
-                posting.setPostingID(Integer.parseInt(obj.getString("postingID")));
-                posting.setJobTitle(obj.getString("jobTitle"));
-                posting.setLocation(obj.getString("location"));
-                posting.setJobDescription(obj.getString("description"));
-                posting.setOrganizerName(obj.getString("organizationName"));
+                posting.setPostingID(Integer.parseInt(obj.getString("PostingID")));
+                posting.setJobTitle(obj.getString("JobTitle"));
+                posting.setLocation(obj.getString("Location"));
+                posting.setJobDescription(obj.getString("Description"));
+                posting.setOrganizerName(obj.getString("OrganizationName"));
 
                 //add new posting to array list
                 postings.add(posting);

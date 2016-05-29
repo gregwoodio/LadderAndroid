@@ -13,8 +13,7 @@ public class User extends Profile {
     protected String resume;
     protected int academicStatus;
 
-    public User(int profileID, String username, String firstName, String lastName, String email,
-                   String userDescription, String resume, int academicStatus, URL pictureURL, Date timestamp) {
+    public User() {
         //fields from Profile superclass
         this.profileID = profileID;
         this.username = username;
