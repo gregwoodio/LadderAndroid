@@ -21,8 +21,10 @@ import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import tech.gregwood.ladderandroid.data.Organization;
 import tech.gregwood.ladderandroid.data.Posting;
 import tech.gregwood.ladderandroid.data.Profile;
+import tech.gregwood.ladderandroid.data.User;
 
 /**
  * Created by greg on 5/3/2016.
@@ -118,6 +120,32 @@ public class Utility {
     }
 
     /**
+     * Gets a specified User from the database.
+     * @param id ID of the specified User.
+     * @return A JSON array containing the specified User.
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static JSONArray getUser(int id) throws IOException, JSONException {
+        AbstractMap.SimpleEntry<String, String> requestedID = new AbstractMap.SimpleEntry<String, String>("ProfileID", Integer.toString(id));
+        JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/GetUser.php", requestedID);
+        return json;
+    }
+
+    /**
+     * Gets a specified Organization from the database.
+     * @param id ID of the specified Organization
+     * @return A JSON array containing the specified Organization
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static JSONArray getOrganization(int id) throws IOException, JSONException {
+        AbstractMap.SimpleEntry<String, String> requestedID = new AbstractMap.SimpleEntry<String, String>("ProfileID", Integer.toString(id));
+        JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/GetOrganization.php", requestedID);
+        return json;
+    }
+
+    /**
      * Gets a specified posting
      * @param id ID of the specified posting.
      * @return A JSON array containing the specified posting.
@@ -128,6 +156,77 @@ public class Utility {
         AbstractMap.SimpleEntry<String, String> requestedID = new AbstractMap.SimpleEntry<String, String>("PostingID", Integer.toString(id));
         JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/GetPosting.php", requestedID);
         return json;
+    }
+
+    /**
+     * Adds a user to the database.
+     * @param user The User object to add.
+     * @param pw The password the user will be using.
+     * @return Success as a boolean value.
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static boolean addUser(User user, String pw) throws IOException, JSONException {
+
+        //TODO: Add validation
+
+        AbstractMap.SimpleEntry<String, String> username = new AbstractMap.SimpleEntry<String, String>("Username", user.getUsername());
+        AbstractMap.SimpleEntry<String, String> firstName = new AbstractMap.SimpleEntry<String, String>("FirstName", user.getFirstName());
+        AbstractMap.SimpleEntry<String, String> lastName = new AbstractMap.SimpleEntry<String, String>("LastName", user.getLastName());
+        AbstractMap.SimpleEntry<String, String> password = new AbstractMap.SimpleEntry<String, String>("Password", pw);
+        AbstractMap.SimpleEntry<String, String> email = new AbstractMap.SimpleEntry<String, String>("Email", user.getEmail());
+        AbstractMap.SimpleEntry<String, String> description = new AbstractMap.SimpleEntry<String, String>("Description", user.getUserDescription());
+        AbstractMap.SimpleEntry<String, String> resume = new AbstractMap.SimpleEntry<String, String>("Resume", user.getResume());
+        AbstractMap.SimpleEntry<String, String> academicStatus = new AbstractMap.SimpleEntry<String, String>("AcademicStatus", Integer.toString(user.getAcademicStatus()));
+        AbstractMap.SimpleEntry<String, String> pictureURL = new AbstractMap.SimpleEntry<String, String>("Picture", user.getPictureURL().getPath());
+
+        JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/AddUser.php",
+                username, firstName, lastName, password, email,
+                description, resume, academicStatus, pictureURL);
+
+        Log.d("LADDER_DEBUG", json.toString());
+
+        String result = json.getString(0);
+        if (result.equals("true")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Adds an Organization to the database.
+     * @param organization The Organization object to add
+     * @param pw The password
+     * @return Success as a boolean value.
+     * @throws IOException
+     * @throws JSONException
+     */
+    public static boolean addOrganization(Organization organization, String pw) throws IOException, JSONException {
+
+        //TODO: Add validation
+
+        AbstractMap.SimpleEntry<String, String> username = new AbstractMap.SimpleEntry<String, String>("Username", organization.getUsername());
+        AbstractMap.SimpleEntry<String, String> orgName = new AbstractMap.SimpleEntry<String, String>("OrgName", organization.getOrganizationName());
+        AbstractMap.SimpleEntry<String, String> password = new AbstractMap.SimpleEntry<String, String>("Password", pw);
+        AbstractMap.SimpleEntry<String, String> email = new AbstractMap.SimpleEntry<String, String>("Email", organization.getEmail());
+        AbstractMap.SimpleEntry<String, String> address = new AbstractMap.SimpleEntry<String, String>("Address", organization.getAddress());
+        AbstractMap.SimpleEntry<String, String> url = new AbstractMap.SimpleEntry<String, String>("URL", organization.getUrl().getPath());
+        AbstractMap.SimpleEntry<String, String> mission = new AbstractMap.SimpleEntry<String, String>("Mission", organization.getMissionStatement());
+        AbstractMap.SimpleEntry<String, String> pictureURL = new AbstractMap.SimpleEntry<String, String>("PictureURL", organization.getPictureURL().getPath());
+
+        JSONArray json = readFromUrl("http://mobile.sheridanc.on.ca/~woodgre/Ladder/AddOrganization.php",
+                username, orgName, password, email,
+                address, url, mission, pictureURL);
+
+        Log.d("LADDER_DEBUG", json.toString());
+
+        String result = json.getString(0);
+        if (result.equals("true")) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -158,6 +257,14 @@ public class Utility {
         return false;
     }
 
+    /**
+     * Logs in either a User or Organization.
+     * @param u The username of the user
+     * @param p The password of the user.
+     * @return A JSON Array containing the information about the logged in user.
+     * @throws IOException
+     * @throws JSONException
+     */
     public static JSONArray loginProfile(String u, String p) throws IOException, JSONException {
 
         AbstractMap.SimpleEntry<String, String> username = new AbstractMap.SimpleEntry<String, String>("Username", u);
