@@ -13,6 +13,7 @@ public abstract class Profile {
     protected URL pictureURL;
     protected Date timestamp;
     protected int accountType;
+    protected String password;
 
     public int getProfileID() {
         return profileID;
@@ -60,5 +61,13 @@ public abstract class Profile {
 
     public void setAccountType(int accountType) {
         this.accountType = accountType;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

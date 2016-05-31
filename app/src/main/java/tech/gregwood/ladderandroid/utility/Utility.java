@@ -161,19 +161,18 @@ public class Utility {
     /**
      * Adds a user to the database.
      * @param user The User object to add.
-     * @param pw The password the user will be using.
      * @return Success as a boolean value.
      * @throws IOException
      * @throws JSONException
      */
-    public static boolean addUser(User user, String pw) throws IOException, JSONException {
+    public static boolean addUser(User user) throws IOException, JSONException {
 
         //TODO: Add validation
 
         AbstractMap.SimpleEntry<String, String> username = new AbstractMap.SimpleEntry<String, String>("Username", user.getUsername());
         AbstractMap.SimpleEntry<String, String> firstName = new AbstractMap.SimpleEntry<String, String>("FirstName", user.getFirstName());
         AbstractMap.SimpleEntry<String, String> lastName = new AbstractMap.SimpleEntry<String, String>("LastName", user.getLastName());
-        AbstractMap.SimpleEntry<String, String> password = new AbstractMap.SimpleEntry<String, String>("Password", pw);
+        AbstractMap.SimpleEntry<String, String> password = new AbstractMap.SimpleEntry<String, String>("Password", user.getPassword());
         AbstractMap.SimpleEntry<String, String> email = new AbstractMap.SimpleEntry<String, String>("Email", user.getEmail());
         AbstractMap.SimpleEntry<String, String> description = new AbstractMap.SimpleEntry<String, String>("Description", user.getUserDescription());
         AbstractMap.SimpleEntry<String, String> resume = new AbstractMap.SimpleEntry<String, String>("Resume", user.getResume());
@@ -197,21 +196,25 @@ public class Utility {
     /**
      * Adds an Organization to the database.
      * @param organization The Organization object to add
-     * @param pw The password
      * @return Success as a boolean value.
      * @throws IOException
      * @throws JSONException
      */
-    public static boolean addOrganization(Organization organization, String pw) throws IOException, JSONException {
+    public static boolean addOrganization(Organization organization) throws IOException, JSONException {
 
         //TODO: Add validation
 
         AbstractMap.SimpleEntry<String, String> username = new AbstractMap.SimpleEntry<String, String>("Username", organization.getUsername());
         AbstractMap.SimpleEntry<String, String> orgName = new AbstractMap.SimpleEntry<String, String>("OrgName", organization.getOrganizationName());
-        AbstractMap.SimpleEntry<String, String> password = new AbstractMap.SimpleEntry<String, String>("Password", pw);
+        AbstractMap.SimpleEntry<String, String> password = new AbstractMap.SimpleEntry<String, String>("Password", organization.getPassword());
         AbstractMap.SimpleEntry<String, String> email = new AbstractMap.SimpleEntry<String, String>("Email", organization.getEmail());
         AbstractMap.SimpleEntry<String, String> address = new AbstractMap.SimpleEntry<String, String>("Address", organization.getAddress());
-        AbstractMap.SimpleEntry<String, String> url = new AbstractMap.SimpleEntry<String, String>("URL", organization.getUrl().getPath());
+        AbstractMap.SimpleEntry<String, String> url;
+        if (organization.getUrl() != null) {
+            url = new AbstractMap.SimpleEntry<String, String>("URL", organization.getUrl().toString());
+        } else {
+            url = new AbstractMap.SimpleEntry<String, String>("URL", "");
+        }
         AbstractMap.SimpleEntry<String, String> mission = new AbstractMap.SimpleEntry<String, String>("Mission", organization.getMissionStatement());
         AbstractMap.SimpleEntry<String, String> pictureURL = new AbstractMap.SimpleEntry<String, String>("PictureURL", organization.getPictureURL().getPath());
 
